@@ -17,6 +17,7 @@ function init(router) {
 }
 
 function getAllUsers(req,res) {
+  console.log("ere");
   userService.getAllUser().then((data) => {
       res.send(data);
     }).catch((err) => {

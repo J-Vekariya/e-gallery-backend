@@ -8,6 +8,7 @@ var dbfunc = require('./db-function');
 var http  = require('http')
 var bodyParser = require('body-parser');
 var UserRoute = require('../app/routes/user.route');
+var ProductRoute = require('../app/routes/product.route');
 var AuthenticRoute = require('../app/routes/authentic.route');
 var errorCode = require('../common/error-code')
 var errorMessage = require('../common/error-methods')
@@ -39,6 +40,7 @@ app.use('/api',router);
 AuthenticRoute.init(router);
 
 var secureApi = express.Router();
+var productApi = express.Router();
 
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -48,9 +50,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/secureApi',secureApi);
 secureApi.use(checkToken);
 
+app.use('/product',productApi);
+productApi.use(checkToken);
+
 
 app.use(function (err, req, res, next) {
-  console.error(err.stack);
+  
   res.status(500).send('Something broke!');
 });
 
@@ -65,5 +70,6 @@ var ApiConfig = {
 }
 
 UserRoute.init(secureApi);
+ProductRoute.init(productApi);
 
 module.exports = ApiConfig;

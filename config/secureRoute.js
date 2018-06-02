@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 module.exports = function checkToken(req, res, next) {
     var token = req.headers['token'];
     if(token) {
-      jwt.verify(token, 'my_secret_key',(err,decode)=>{
+      jwt.verify(token, 'egallerysecret',(err,decode)=>{
+        
         if(err) {
           res.json({"status":500,
             "message":"INVALID TOKEN",

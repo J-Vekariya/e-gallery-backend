@@ -10,12 +10,15 @@ var userModel = {
 }
 
 function getAllUser() {
+    console.log("here");    
     return new Promise((resolve,reject) => {
-        db.query(`CALL get_user()`,(error,rows,fields)=>{
+        db.query(`SELECT * FROM user`,(error,rows,fields)=>{
             if(!!error) {
+                console.log("error");
                 dbFunc.connectionRelease;
                 reject(error);
             } else {
+                console.log("done");
                 dbFunc.connectionRelease;
                 resolve(rows[0]);
             }

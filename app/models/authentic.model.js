@@ -12,7 +12,12 @@ function authentic(authenticData) {
         db.query(`SELECT * FROM user WHERE username ='${authenticData.username}'`, (error, rows, fields) => {
             if (error) {
                 reject(error);
-            } else {
+            }
+            else if(rows.length==0){
+                reject({"success":false,"message":"username doesnot match"});
+            } 
+            
+            else {
                 bcrypt.compare(authenticData.password, rows[0].password, function (err, isMatch) {
                     if (err) {
                         reject(error);
@@ -32,6 +37,8 @@ function authentic(authenticData) {
 
 
 function signup(user) {
+    
+
     return new Promise((resolve, reject) => {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) {
@@ -50,21 +57,40 @@ function signup(user) {
                         dbFunc.connectionRelease;
                         reject({"success":false,"message":"user already exist ! try with different user"});
                     } else {
-                        db.query("INSERT INTO user(username,password)VALUES('" + user.username + "','" + user.password + "')", (error, rows, fields) => {
+                        db.query("SELECT * FROM user WHERE email='"+user.email+"'", (error, rows, fields) => {
                             if (error) {
                                 dbFunc.connectionRelease;
                                 reject(error);
-                            } else {
+                            } else if(rows.length>0) {
                                 dbFunc.connectionRelease;
-                                resolve(rows);
+                                reject({"success":false,"message":"user already exist with this email address! try with different email"});
+                            } else {
+                                db.query("SELECT * FROM user WHERE mobile_number='"+user.mobile_number+"'", (error, rows, fields) => {
+                                    if (error) {
+                                        dbFunc.connectionRelease;
+                                        reject(error);
+                                    } else if(rows.length>0) {
+                                        dbFunc.connectionRelease;
+                                        reject({"success":false,"message":"user already exist with this mobile number! try with different mobile number"});
+                                    } else {
+                                        db.query("INSERT INTO user(username,password,first_name,last_name,email,mobile_number)VALUES('" + user.username + "','" + user.password + "','" + user.first_name + "','" + user.last_name + "','" + user.email +"','" + user.mobile_number + "')", (error, rows, fields) => {
+                                            if (error) {
+                                                dbFunc.connectionRelease;
+                                                reject(error);
+                                            } else {
+                                                dbFunc.connectionRelease;
+                                                resolve(rows);
+                                            }
+                                        });
+                                    }
+                                });
                             }
-                        });
+                        })
                     }
                 });
-            })
-
-        });
-    });
+            });
+        })
+    })
 }
 
 module.exports = authenticModel;
