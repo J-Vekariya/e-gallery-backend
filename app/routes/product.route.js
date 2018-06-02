@@ -3,7 +3,7 @@ var iValidator = require('../../common/iValidator');
 var errorCode = require('../../common/error-code');
 var errorMessage = require('../../common/error-methods');
 var mail = require('./../../common/mailer.js');
-
+const fileUpload = require('express-fileupload');
 
 function init(router) {
     router.route('/add_product')
@@ -12,6 +12,8 @@ function init(router) {
         .get(getType);
     router.route('/subject_type')
         .get(getSubject);
+    router.route('/uploadPhoto',fileUpload())
+        .post(uploadPhoto);
      
     
 }
@@ -45,6 +47,17 @@ function addProduct(req,res) {
   //  }
 
   productService.addProduct(productData).then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    mail.mail(err);
+    res.json(err);
+  });
+
+}
+
+function uploadPhoto(req,res) {
+  var photoData = req;
+  productService.uploadPhoto(photoData).then((data) => {
     res.json(data);
   }).catch((err) => {
     mail.mail(err);

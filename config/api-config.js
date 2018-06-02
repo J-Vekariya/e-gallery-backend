@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 var path  = require('path');
+const fileUpload = require('express-fileupload');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 var db = require('./database');
@@ -13,6 +14,7 @@ var AuthenticRoute = require('../app/routes/authentic.route');
 var errorCode = require('../common/error-code')
 var errorMessage = require('../common/error-methods')
 var checkToken = require('./secureRoute');
+
 
 // var schedule = require('node-schedule');
  
@@ -32,6 +34,8 @@ dbfunc.connectionCheck.then((data) =>{
     res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+
+app.use(fileUpload());
 
 app.use(bodyParser.json());
 

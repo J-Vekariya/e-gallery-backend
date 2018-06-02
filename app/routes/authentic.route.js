@@ -27,7 +27,7 @@ function authentic(req,res) {
    authenticService.authentic(authenticData).then((data) => {
    if(data) {
       var username = data.username;
-      const token = jwt.sign({username},'egallerysecret',{ expiresIn: 60*60*24 });
+      const token = jwt.sign({username},'egallerysecret',{ expiresIn: 60*60 });
       res.json({
         "success":true,
         "data":data,
