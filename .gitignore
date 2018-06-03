@@ -4,6 +4,7 @@
 
 # dependencies
 /node_modules
+/app/photo-store
 
 
 # IDEs and editors
