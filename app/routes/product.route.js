@@ -14,6 +14,12 @@ function init(router) {
         .get(getSubject);
     router.route('/uploadPhoto',fileUpload())
         .post(uploadPhoto);
+    router.route('/cost')
+        .post(addCost);
+    router.route('/getProductData')
+        .post(getProductData);
+    router.route('/getProductList')
+        .post(getProductList);
      
     
 }
@@ -38,13 +44,6 @@ function getSubject(req,res) {
 
 function addProduct(req,res) {
   var productData=req.body;
-  
-  
-  //Validating the input entity
-  //  var json_format = iValidator.json_schema(schema.postSchema, productData, "product");
-  //  if (json_format.valid == false) {
-  //    return res.status(422).send(json_format.errorMessage);
-  //  }
 
   productService.addProduct(productData).then((data) => {
     res.json(data);
@@ -63,7 +62,36 @@ function uploadPhoto(req,res) {
     mail.mail(err);
     res.json(err);
   });
+}
 
+function addCost(req,res) {
+  var costData = req.body;
+  productService.addCost(costData).then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    mail.mail(err);
+    res.json(err);
+  });
+}
+
+function getProductData(req,res) {
+  var getData = req.body;
+  productService.getProductData(getData).then((data) => {
+    res.send(data);
+  }).catch((err) => {
+    mail.mail(err);
+    res.send(err);
+  });
+}
+
+function getProductList(req,res) {
+  var getList = req.body;
+  productService.getProductList(getList).then((data) => {
+    res.send(data);
+  }).catch((err) => {
+    mail.mail(err);
+    res.send(err);
+  });
 }
 
 

@@ -6,7 +6,9 @@ var productService = {
     getSubject: getSubject,
     addProduct: addProduct,
     uploadPhoto: uploadPhoto,
-    
+    addCost: addCost,
+    getProductData:getProductData,
+    getProductList:getProductList
 }
 
 
@@ -50,6 +52,37 @@ function uploadPhoto(photoData) {
         })
     })
    
+}
+
+function addCost(costData) {
+    return new Promise((resolve,reject) => {
+        productModel.addCost(costData).then((data)=>{
+            resolve(data);
+        }).catch((err) => {
+            reject(err);
+        })
+    })
+   
+}
+
+function getProductData(getData) {
+    return new Promise((resolve,reject) => {
+        productModel.getProductData(getData).then((data)=>{
+            resolve(data);
+        }).catch((err) => {
+            reject(err);
+        })
+    });
+}
+
+function getProductList(getList) {
+    return new Promise((resolve,reject) => {
+        productModel.getProductList(getList).then((data)=>{
+            resolve(data);
+        }).catch((err) => {
+            reject(err);
+        })
+    });
 }
 
 
